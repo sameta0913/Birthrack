@@ -21,7 +21,7 @@ Step4 ( Finish! )
 ```
 python3 Birthrack.py
 ```
-#If...
+# If...
 
 If you don't have the requests library installed, install it with the following command:
 ```
