@@ -14,3 +14,28 @@ git clone https://github.com/sharkDya/Birthrack.git
 cd Birthrack
 chmod +x Birthrack.py
 python3 Birthrack.py
+```
+
+
+## 🧩 If you get an error about requests...
+Install it with:
+
+```bash
+
+pip install requests
+
+```
+
+## 💬 Feedback
+Please feel free to use it and let me know if you have any suggestions or improvements 🥺
+Thank you for using!
+
+## 🐦 X (Twitter)
+```
+@SecStudent5764
+
+
+
+
+
+
