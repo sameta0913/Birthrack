@@ -1,5 +1,11 @@
 import requests
 
+print (r"""
+d88PPPo    8888   ,dbPPPp 888888888 888  888   ,dbPPPp ,8b.     doooooo 888  ,dP 
+888ooo8    8888   d88ooP'    '88d   88888888   d88ooP' 88'8o    d88     888o8P'  
+888   8    8888 ,88' P'     '888    88P  888 ,88' P'   88PPY8.  d88     888 Y8L  
+888PPPP    8888 88  do    '88p      88P  888 88  do    8b   `Y' d888888 888  `8p
+""")    
 def generate_passwords(username, symbol):
     passwords = []
     for month in range(1, 13):
